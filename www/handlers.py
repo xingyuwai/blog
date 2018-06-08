@@ -6,7 +6,7 @@
 @license:   (C)Copyright:2018
 @file:      handlers.py
 @time:      18-6-8上午10:01
-@desc:      
+@desc:      url handlers
 """
 
 import sys
