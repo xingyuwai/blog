@@ -30,17 +30,23 @@ def log(sql, args=()):
 def create_pool(loop, **kw):
     logging.info('create database connection pool ......')
     global __pool  # connection pool saved in __pool
+    # aiomysql.create_pool(minsize=1,maxsize=10) :  a coroutine that creates a pool of connections to Mysql .
+    #                                               return : pool instance(class Pool)
+    # port 3306 is for mysql
     __pool = yield from aiomysql.create_pool(
         host=kw.get('host', 'localhost'),
         port=kw.get('port', 3306),
-        user=kw['password'],
+        user=kw['user'],
+        password=kw['password'],
         db=kw['db'],
-
         # dict.get(key[,default])--> return the value for the key ; if not found, default; otherwise,None.
-        charset=kw.get('charset', 'utf-8'),
+        # charset you want to use ,
+        # e.g, 'utf8'  not utf-8 , wrong~!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        charset=kw.get('charset', 'utf8'),
         autocommit=kw.get('autocommit', True),
         maxsize=kw.get('maxsize', 10),
         minsize=kw.get('minsize', 1),
+        # loop is an optional event loop instance asyncio.get_loop()is used if loop is not specified.
         loop=loop
     )
 

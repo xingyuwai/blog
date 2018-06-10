@@ -21,7 +21,7 @@ from urllib import parse  # url is a package which collects several modules work
 from aiohttp import web
 
 # user defined package
-from .apis import APIError
+from apis import APIError
 
 
 def main(argv):
@@ -138,6 +138,7 @@ class RequestHandler(object):
         2. get arguments from request;
         3. call URL-function, then transform the "return" into web.Response object,
                 to meet the requirement of  aiohttp frame.
+    because of __call__(), instances of ReuestHandler can also be methods.
 
     """
 
@@ -197,41 +198,85 @@ class RequestHandler(object):
                     return web.HTTPBadRequest('Missing argument: %s' % name)
         logging.info('call with args: %s' % str(kw))
         try:
-            r = await self._func(**kw)
+            r = await self._func(**kw)    # _func = fn ,call URL functions, which is a parameter of class RequestHandler
             return r
         except APIError as e:
             return dict(error=e.error, data=e.data, message=e.message)
 
 
 def add_static(app):
+    """
+    %www/static: absolute dir into relative dir.%
+    :param app:
+    :return:
+    """
+    # abspath(path) return a normalized absolutized version of "path"
+    # dirname(path): return the directory name.
+    # path is absolute dir of www/static
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+    """
+    by router.add_static(prefix, path),   -->prefix--url prefix(start with '/');   path --- folder with files
+                            redefine "prefix", to hide the real path of static resources like pic/css/js on the server,
+                            or unify source files in different paths into a certain dir.
+    """
     app.router.add_static('/static/', path)
     logging.info('add static %s => %s' % ('/static/', path))
 
 
 def add_route(app, fn):
+    """
+    to register a URL-handle method
+    :param app:
+    :param fn:
+    :return:
+    """
+    # getattr(object, name[,default]): a built-in method return the value of attribute "object.name";
+    #  if not found--> default / AttributerError
     method = getattr(fn, '__method__', None)
     path = getattr(fn, '__route__', None)
     if path is None or method is None:
         raise ValueError('@get or @post not defined in %s.' % str(fn))
+
+    # inspect module contains methods providing info about live objects
+    # inspect.isgeneratorfunction(object) : return ture if "object" is a generator function
     if not asyncio.iscoroutinefunction(fn) and not inspect.isgeneratorfunction(fn):
-        fn = asyncio.coroutine(fn)
+        fn = asyncio.coroutine(fn)   # a decorator .  function_name is also a variable.
     logging.info(
         'add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters.keys())))
     app.router.add_route(method, path, RequestHandler(app, fn))
 
 
 def add_routes(app, module_name):
+    """
+    register all the functions that meet the requirement automatically in module handler
+        e.g.: add_routes(app, 'handlers')
+    :param app:
+    :param module_name:
+    :return:
+    """
+    # str.rfind(sub[,start[,end]]): return the highest index where substring "sub" is find in str / or str[start:end]
+    # return -1 on failure.
     n = module_name.rfind('.')
     if n == (-1):
+        # %__import__() equals to "import package"%
+        # direct use of __import__ is discouraged in favor of  importlib.import_module(name, package=None)
+        # parameter "name" specifies what module to import in absolute/relative term.
+        #  ??? import_module ???
         mod = __import__(module_name, globals(), locals())
     else:
+        # if "module_name" is in the form of "a.b.c.handler", get "handler".
         name = module_name[n + 1:]
+        # getattr(object, name[,default]) , here mod = name of the package imported
         mod = getattr(__import__(module_name[:n], globals(), locals(), [name]), name)
+    # dir([object]) : return a list of valid attributes for the object
     for attr in dir(mod):
+        # str.startswith(prefix[,start[,end]]) : return true/false
+        # _var : instance var
+        # __var :private var
+        # __var__: exclusive var owned by python itself.
         if attr.startswith('_'):
             continue
-        fn = getattr(mod, attr)
+        fn = getattr(mod, attr)   # get the value
         if callable(fn):
             method = getattr(fn, '__method__', None)
             path = getattr(fn, '__route__', None)
