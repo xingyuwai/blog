@@ -22,7 +22,7 @@ from aiohttp import web
 
 from coroweb import get, post
 from models import User, Comment, Blog, next_id
-from apis import Page, APIValueError, APIResourceNotFoundError
+from apis import *
 from config import configs
 import markdown2
 
@@ -92,14 +92,14 @@ def cookie2user(cookie_str):
 
 
 @get('/')
-def index(*, page='1'):
+async def index(*, page='1'):
     page_index = get_page_index(page)
-    num = yield from Blog.findNumber('count(id)')
+    num = await  Blog.find_number('count(id)')
     page = Page(num)
     if num == 0:
         blogs = []
     else:
-        blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+        blogs = await Blog.find_all(orderBy='created_at desc', limit=(page.offset, page.limit))
     return {
         '__template__': 'blogs.html',
         'page': page,
@@ -110,7 +110,7 @@ def index(*, page='1'):
 @get('/blog/{id}')
 def get_blog(id):
     blog = yield from Blog.find(id)
-    comments = yield from Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
+    comments = yield from Comment.find_all('blog_id=?', [id], orderBy='created_at desc')
     for c in comments:
         c.html_content = text2html(c.content)
     blog.html_content = markdown2.markdown(blog.content)
@@ -141,7 +141,7 @@ def authenticate(*, email, passwd):
         raise APIValueError('email', 'Invalid email.')
     if not passwd:
         raise APIValueError('passwd', 'Invalid password.')
-    users = yield from User.findAll('email=?', [email])
+    users = yield from User.find_all('email=?', [email])
     if len(users) == 0:
         raise APIValueError('email', 'Email not exist.')
     user = users[0]
@@ -220,11 +220,11 @@ def manage_users(*, page='1'):
 @get('/api/comments')
 def api_comments(*, page='1'):
     page_index = get_page_index(page)
-    num = yield from Comment.findNumber('count(id)')
+    num = yield from Comment.find_number('count(id)')
     p = Page(num, page_index)
     if num == 0:
         return dict(page=p, comments=())
-    comments = yield from Comment.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
+    comments = yield from Comment.find_all(orderBy='created_at desc', limit=(p.offset, p.limit))
     return dict(page=p, comments=comments)
 
 
@@ -257,11 +257,11 @@ def api_delete_comments(id, request):
 @get('/api/users')
 def api_get_users(*, page='1'):
     page_index = get_page_index(page)
-    num = yield from User.findNumber('count(id)')
+    num = yield from User.find_number('count(id)')
     p = Page(num, page_index)
     if num == 0:
         return dict(page=p, users=())
-    users = yield from User.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
+    users = yield from User.find_all(orderBy='created_at desc', limit=(p.offset, p.limit))
     for u in users:
         u.passwd = '******'
     return dict(page=p, users=users)
@@ -279,7 +279,7 @@ def api_register_user(*, email, name, passwd):
         raise APIValueError('email')
     if not passwd or not _RE_SHA1.match(passwd):
         raise APIValueError('passwd')
-    users = yield from User.findAll('email=?', [email])
+    users = yield from User.find_all('email=?', [email])
     if len(users) > 0:
         raise APIError('register:failed', 'email', 'Email is already in use.')
     uid = next_id()
@@ -299,11 +299,11 @@ def api_register_user(*, email, name, passwd):
 @get('/api/blogs')
 def api_blogs(*, page='1'):
     page_index = get_page_index(page)
-    num = yield from Blog.findNumber('count(id)')
+    num = yield from Blog.find_number('count(id)')
     p = Page(num, page_index)
     if num == 0:
         return dict(page=p, blogs=())
-    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
+    blogs = yield from Blog.find_all(orderBy='created_at desc', limit=(p.offset, p.limit))
     return dict(page=p, blogs=blogs)
 
 

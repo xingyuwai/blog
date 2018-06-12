@@ -3,13 +3,18 @@
 
 __author__ = 'Michael Liao'
 
-import os, sys, time, subprocess
+import os
+import sys
+import time
+import subprocess
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+
 def log(s):
     print('[Monitor] %s' % s)
+
 
 class MyFileSystemEventHander(FileSystemEventHandler):
 
@@ -22,8 +27,10 @@ class MyFileSystemEventHander(FileSystemEventHandler):
             log('Python source file changed: %s' % event.src_path)
             self.restart()
 
+
 command = ['echo', 'ok']
 process = None
+
 
 def kill_process():
     global process
@@ -34,14 +41,17 @@ def kill_process():
         log('Process ended with code %s.' % process.returncode)
         process = None
 
+
 def start_process():
     global process, command
     log('Start process %s...' % ' '.join(command))
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
+
 def restart_process():
     kill_process()
     start_process()
+
 
 def start_watch(path, callback):
     observer = Observer()
@@ -56,7 +66,8 @@ def start_watch(path, callback):
         observer.stop()
     observer.join()
 
-if __name__ == '__main__':
+
+def main(argv):
     argv = sys.argv[1:]
     if not argv:
         print('Usage: ./pymonitor your-script.py')
@@ -66,3 +77,7 @@ if __name__ == '__main__':
     command = argv
     path = os.path.abspath('.')
     start_watch(path, None)
+
+
+if __name__ == '__main__':
+    exit(main(sys.argv[1:]))

@@ -67,7 +67,7 @@ def select(sql, args, size=None):
         if size:
 
             # if size is specified , use it; otherwise, all.
-            re = yield from cur.fetchmany(size)
+            rs = yield from cur.fetchmany(size)
         else:
             rs = yield from cur.fetchall()
         yield from cur.close()
