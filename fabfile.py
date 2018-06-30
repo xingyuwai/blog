@@ -3,21 +3,38 @@
 
 __author__ = 'Michael Liao'
 
-'''
-Deployment toolkit.
-'''
 
-import os, re
+"""
+Deployment toolkit.
+fabfile is a automation operation and  maintenance tool
+you'd better use ssh instead of passwords:
+                        put the public key in dir--> ~/.ssh/authorized_keys
+                                 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys 
+            with this configure file , you can use "fab  'command'"in shell
+            to run the method implemented here.  (the "command" is the method name.)
+                         
+"""
+
+import os
+import re
 from datetime import datetime
+
 from fabric.api import *
 
+"""
+at first fabric.api/env .... are not "referenced", 
+          it's a version-problem of fabric .use fabric3 instead of fabric, to ensure the compatibility with fab 1.xx
+          in fabric3, no longer use env.user ...... , instead , use OOP--> a class connection(host,user=None....)
+"""
 env.user = 'michael'
-env.sudo_user = 'root'
+env.sudo_user= 'root'
 env.hosts = ['192.168.0.3']
 
+# mysql on server
 db_user = 'www-data'
 db_password = 'www-data'
 
+# each method in python here is a task
 _TAR_FILE = 'dist-awesome.tar.gz'
 
 _REMOTE_TMP_TAR = '/tmp/%s' % _TAR_FILE
@@ -81,8 +98,10 @@ def deploy():
         sudo('supervisorctl start awesome')
         sudo('/etc/init.d/nginx reload')
 
-
-RE_FILES = re.compile('\r?\n')
+# re is regular expression module .
+# re.compile(pattern ,flags=0)  :compile the string in RE , return a re object
+# which can be used for matching by match()/search().
+RE_FILES = re.compile('\r?\n')    # windows: \r\n   Linux: \n   Mac: \r
 
 
 def rollback():
@@ -91,7 +110,10 @@ def rollback():
     '''
     with cd(_REMOTE_BASE_DIR):
         r = run('ls -p -1')
+        # % re.split()return a list of strings%.
+        # s[:-1] drop the last char of each s returned by re.split()
         files = [s[:-1] for s in RE_FILES.split(r) if s.startswith('www-') and s.endswith('/')]
+        # list.sort(*, key=None, reverse=False)  : "key" specifies a function acting as a comparer
         files.sort(cmp=lambda s1, s2: 1 if s1 < s2 else -1)
         r = run('ls -l www')
         ss = r.split(' -> ')
@@ -102,7 +124,9 @@ def rollback():
         print('Found current symbol link points to: %s\n' % current)
         try:
             index = files.index(current)
-        except ValueError, e:
+        # In new versions of python , it's except exception as e instead of "except exception , e"
+        # "as e" means acquire the exception and save it in 'e'
+        except ValueError as e:
             print('ERROR: symbol link is invalid.')
             return
         if len(files) == index + 1:
@@ -118,7 +142,7 @@ def rollback():
                 print('                   %s' % f)
         print('==================================================')
         print('')
-        yn = raw_input('continue? y/N ')
+        yn = input('continue? y/N ')  # raw_input()is removed in python3.
         if yn != 'y' and yn != 'Y':
             print('Rollback cancelled.')
             return
@@ -142,8 +166,7 @@ def restore2local():
     files = [f for f in fs if f.startswith('backup-') and f.endswith('.sql.tar.gz')]
     files.sort(cmp=lambda s1, s2: 1 if s1 < s2 else -1)
     if len(files) == 0:
-        print
-        'No backup files found.'
+        print('No backup files found.')
         return
     print('Found %s backup files:' % len(files))
     print('==================================================')
@@ -154,17 +177,17 @@ def restore2local():
     print('==================================================')
     print('')
     try:
-        num = int(raw_input('Restore file: '))
+        num = int(input('Restore file: '))
     except ValueError:
         print('Invalid file number.')
         return
     restore_file = files[num]
-    yn = raw_input('Restore file %s: %s? y/N ' % (num, restore_file))
+    yn = input('Restore file %s: %s? y/N ' % (num, restore_file))
     if yn != 'y' and yn != 'Y':
         print('Restore cancelled.')
         return
     print('Start restore to local database...')
-    p = raw_input('Input mysql root password: ')
+    p = input('Input mysql root password: ')
     sqls = [
         'drop database if exists awesome;',
         'create database awesome;',
