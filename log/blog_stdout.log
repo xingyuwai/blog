@@ -174,3 +174,123 @@ Traceback (most recent call last):
   File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
     import aiomysql
 ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'
+Traceback (most recent call last):
+  File "/home/jia/Desktop/python/blog/www/app.py", line 30, in <module>
+    from orm import *
+  File "/home/jia/Desktop/python/blog/www/orm.py", line 16, in <module>
+    import aiomysql
+ImportError: No module named 'aiomysql'

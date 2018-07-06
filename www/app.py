@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 """
-@author:Mr Bian
+@author:Mr LaoBian
 @licence:(C) Copyright 2018-2022. Bian Group.
 @time:5/26/184:16 PM
 @file:app.py
@@ -168,6 +168,7 @@ async def init(loop):
     :param loop:
     :return: srv
     """
+    #  async---await   ==== @asyncio.coroutine  --- yield from
     await create_pool(loop=loop, **configs.db)
     app = web.Application(loop=loop, middlewares=[
         logger_factory, auth_factory, response_factory

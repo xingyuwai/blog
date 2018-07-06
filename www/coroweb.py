@@ -231,6 +231,7 @@ def add_route(app, fn):
     :return:
     """
     # getattr(object, name[,default]): a built-in method return the value of attribute "object.name";
+    # getattr(x, 'y') is equivalent to x.y.
     #  if not found--> default / AttributerError
     method = getattr(fn, '__method__', None)
     path = getattr(fn, '__route__', None)
